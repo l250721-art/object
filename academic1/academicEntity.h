@@ -18,7 +18,6 @@ public:
     string getName()  const;
     string getEmail() const;
 
-    // Setters
     void setID(string id);
     void setName(string n);
     void setEmail(string e);
