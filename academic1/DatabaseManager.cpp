@@ -12,7 +12,7 @@ DatabaseManager::DatabaseManager() {
     venueCount = 0;
     sectionCount = 0;
 
-   
+
     coreExamW = 50; coreAssignW = 30; coreQuizW = 20;
     electiveExamW = 30; electiveAssignW = 40; electiveQuizW = 30;
     labExamW = 0;  labAssignW = 60; labQuizW = 40;
@@ -30,6 +30,16 @@ DatabaseManager::~DatabaseManager() {
         delete courses[i];
         courses[i] = nullptr;
     }
+}
+
+void DatabaseManager::applyWeightages(Course* c)
+{
+    if (c->getCourseType() == "Core")
+        c->setWeightages(coreExamW, coreAssignW, coreQuizW);
+    else if (c->getCourseType() == "Elective")
+        c->setWeightages(electiveExamW, electiveAssignW, electiveQuizW);
+    else if (c->getCourseType() == "Lab")
+        c->setWeightages(labExamW, labAssignW, labQuizW);
 }
 
 string* DatabaseManager::splitLine(string line, char delim, int& count) {
@@ -104,7 +114,7 @@ void DatabaseManager::loadStudents() {
         if (type == "Regular") {
             s = new RegularStudent(id, name, email);
             if (count >= 5 && p[4] != "0") {
-               
+
             }
         }
         else if (type == "Scholarship") {
@@ -320,7 +330,7 @@ void DatabaseManager::saveSections() {
 void DatabaseManager::saveAssessments() {
     ofstream file("Assessments.txt");
     file << "# CourseID|StudentID|Type|RawScore|MaxScore" << endl;
-   
+
     file.close();
 }
 
@@ -524,7 +534,7 @@ bool DatabaseManager::registerStudentForSection(string studentID, string section
     for (int i = 0; i < sectionCount; i++) {
         if (sections[i].getSectionID() == sectionID) continue;
         if (!sections[i].hasTimeConflict(newTime)) continue;
-        
+
         Course* otherCourse = findCourse(sections[i].getCourseID());
         if (otherCourse && otherCourse->isEnrolled(studentID)) {
             cout << "  ERROR: Time Conflict! Student is already in section "
@@ -534,7 +544,7 @@ bool DatabaseManager::registerStudentForSection(string studentID, string section
         }
     }
 
- 
+
     c->enrollStudent(studentID);
     s->addCourse(sec->getCourseID());
     cout << "  SUCCESS: " << s->getName() << " enrolled in "
