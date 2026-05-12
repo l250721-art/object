@@ -1,29 +1,73 @@
 #pragma once
 #include "Assessment.h"
-#include <iostream>
+#include <string>
 using namespace std;
 
-Assessment::Assessment() {
-    type = "";
-    rawScore = 0;
-    maxScore = 100;
-    weightage = 0;
-}
+const int MAX_ASSESSMENTS = 20;
+const int MAX_ENROLLED = 100;
 
-Assessment::Assessment(string t, double raw, double max, double weight) {
-    type = t;
-    rawScore = raw;
-    maxScore = max;
-    weightage = weight;
-}
 
-string Assessment::getType()      const { return type; }
-double Assessment::getRawScore()  const { return rawScore; }
-double Assessment::getMaxScore()  const { return maxScore; }
-double Assessment::getWeightage() const { return weightage; }
+class Course {
+protected:
+    string courseID;
+    string title;
+    string teacherID;
+    string courseType;   
 
-void Assessment::setRawScore(double s) { rawScore = s; }
-void Assessment::setMaxScore(double m) { maxScore = m; }
-void Assessment::setWeightage(double w) { weightage = w; }
+    
+    Assessment* assessments[MAX_ASSESSMENTS];
+    int assessmentCount;
 
-Assessment::~Assessment() {}
+   
+    string enrolledStudentIDs[MAX_ENROLLED];
+    int enrolledCount;
+
+    
+    double examWeightage;
+    double assignmentWeightage;
+    double quizWeightage;
+
+public:
+    Course();
+    Course(string id, string title, string teacherID, string type);
+
+   
+    string getCourseID()  
+        const;
+    string getTitle()     
+        const;
+    string getTeacherID()  
+        const;
+    string getCourseType() 
+        const;
+    int    getEnrolledCount() 
+        const;
+    string getEnrolledStudentID(int index)
+        const;
+
+    
+    void setWeightages(double exam, double assign, double quiz);
+
+  
+    bool enrollStudent(string studentID);  
+    bool isEnrolled(string studentID) 
+        const;
+    void removeStudent(string studentID);
+
+    
+    void addAssessment(Assessment* a);
+    void enterMarks(string studentID, string assessType, double raw, double max);
+
+   
+    virtual double calculateFinalGrade(string studentID) 
+        const = 0;
+    virtual int    getExamDuration()                     
+        const = 0;  
+    virtual void   displayInfo()                       
+        const = 0;
+
+    
+    void displayAssessments() const;
+
+    virtual ~Course();
+};
