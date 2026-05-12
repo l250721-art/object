@@ -17,7 +17,7 @@ const int MAX_SECTIONS = 100;
 
 class DatabaseManager {
 private:
-    
+
     Student* students[MAX_STUDENTS];
     int       studentCount;
 
@@ -37,7 +37,7 @@ private:
     double electiveExamW, electiveAssignW, electiveQuizW;
     double labExamW, labAssignW, labQuizW;
 
-   
+
     string* splitLine(string line, char delim, int& count);
 
 public:
@@ -54,7 +54,7 @@ public:
     void loadAssessments();
     void loadFeedback();
 
-   
+
     void saveAll();
     void saveStudents();
     void saveTeachers();
@@ -64,7 +64,7 @@ public:
     void saveAssessments();
     void saveFeedback();
 
-  
+
     bool    addStudent(Student* s);
     Student* findStudent(string id);
     bool    deleteStudent(string id);
@@ -72,7 +72,7 @@ public:
     int     getStudentCount() const;
     Student* getStudent(int index);
 
-    
+
     bool     addTeacher(Teacher t);
     Teacher* findTeacher(string id);
     bool     deleteTeacher(string id);
@@ -80,7 +80,7 @@ public:
     int      getTeacherCount() const;
     Teacher* getTeacher(int index);
 
-    
+
     bool    addCourse(Course* c);
     Course* findCourse(string id);
     bool    deleteCourse(string id);
@@ -88,20 +88,21 @@ public:
     int     getCourseCount() const;
     Course* getCourse(int index);
 
-    
+
     bool   addVenue(Venue v);
     Venue* findVenue(string id);
     void   listVenues() const;
     int    getVenueCount() const;
     Venue* getVenue(int index);
 
-   
+
     bool     addSection(Section s);
     Section* findSection(string id);
     void     listSections() const;
     int      getSectionCount() const;
     Section* getSection(int index);
 
-    
+
     bool registerStudentForSection(string studentID, string sectionID);
+    void applyWeightages(Course* c);
 };
