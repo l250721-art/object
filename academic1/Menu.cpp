@@ -42,12 +42,18 @@ int Menu::getIntInput(string prompt, int minVal, int maxVal)
     }
 }
 
+//edge case 
 string Menu::getStringInput(string prompt)
 {
     string val;
-    cout << "  " << prompt;
-    getline(cin, val);
-    return val;
+    while (true)
+    {
+        cout << "  " << prompt;
+        getline(cin, val);
+        if (val != "")
+            return val;
+        cout << "  Input cannot be empty. Try again." << endl;
+    }
 }
 
 void Menu::run()
@@ -136,9 +142,16 @@ void Menu::addStudentFlow()
     else if (type == 2)
     {
         double minGPA = 0;
-        cout << "  Minimum GPA required: ";
-        cin >> minGPA;
-        cin.ignore();
+        while (true)
+        {
+            //edge case 
+            cout << "  Minimum GPA required (0.0 - 4.0): ";
+            cin >> minGPA;
+            cin.ignore();
+            if (minGPA >= 0.0 && minGPA <= 4.0)
+                break;
+            cout << "  Invalid GPA. Must be between 0.0 and 4.0." << endl;
+        }
         s = new ScholarshipStudent(id, name, email, minGPA);
     }
     else
@@ -349,6 +362,7 @@ void Menu::gradingMenu()
     cout << endl;
 
     string studentID = getStringInput("Student ID: ");
+    Student* s = db->findStudent(studentID);
 
     if (!c->isEnrolled(studentID))
     {
@@ -375,8 +389,24 @@ void Menu::gradingMenu()
     cin.ignore();
 
     c->enterMarks(studentID, assessType, raw, max);
+    double finalGrade = c->calculateFinalGrade(studentID);
 
-    Student* s = db->findStudent(studentID);
+    if (s != NULL && s->getStudentType() == "Regular")
+    {
+        RegularStudent* rs = (RegularStudent*)s;
+        rs->setGradeForCourse(courseID, finalGrade / 25.0, 3);
+        cout << "  Final Grade: " << finalGrade << "%" << endl;
+    }
+    if (s != NULL && s->getStudentType() == "Scholarship")
+    {
+        ScholarshipStudent* ss2 = (ScholarshipStudent*)s;
+        ss2->setGradeForCourse(courseID, finalGrade / 25.0, 3);
+        ss2->checkStatus();
+        cout << "  Final Grade: " << finalGrade << "%" << endl;
+        cout << "  Scholarship Status: " << ss2->getStatus() << endl;
+    }
+
+   
 
     if (s != NULL && s->getStudentType() == "Scholarship")
     {
