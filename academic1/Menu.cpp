@@ -10,7 +10,7 @@ Menu::Menu(DatabaseManager* d, Scheduler* s)
 
 void Menu::printLine()
 {
-    cout << "  ================================================" << endl;
+    cout << "================================================" << endl;
 }
 
 void Menu::printHeader(string title)
@@ -296,7 +296,10 @@ void Menu::addCourseFlow()
         c = new LabCourse(id, title, tID);
 
     if (db->addCourse(c))
+    {
+        db->applyWeightages(c);
         cout << "  Course added." << endl;
+    }
 }
 
 void Menu::deleteCourseFlow()
